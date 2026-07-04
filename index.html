@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D-Druck Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', system-ui, sans-serif; }
+        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .accent-gradient { background: linear-gradient(135deg, #0ea5e9, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .bg-accent { background: linear-gradient(135deg, #0ea5e9, #3b82f6); }
+        .bg-accent:hover { background: linear-gradient(135deg, #0284c7, #2563eb); }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex items-center justify-center relative overflow-hidden">
+    <!-- Background decorations -->
+    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20"></div>
+
+    <div class="max-w-3xl w-full glass-panel rounded-2xl shadow-2xl p-6 md:p-10 relative z-10">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold mb-4 accent-gradient uppercase tracking-wider"><i class="fa-solid fa-cube mr-2"></i> 3D-Druck Service</h1>
+            <p class="text-slate-400">Lade deine 3MF-Datei hoch und erhalte sofort deinen Preis.</p>
+        </div>
+
+        <!-- FormSubmit Integration (Sendet E-Mails direkt an miniquang552@gmail.com) -->
+        <form action="https://formsubmit.co/miniquang552@gmail.com" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <!-- Versteckte Felder für E-Mail-Formatierung -->
+            <input type="hidden" name="_subject" value="Neuer 3D-Druck Auftrag!">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="Gesamtpreis" id="hidden_price" value="0,00 €">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Kontaktdaten -->
+                <div class="space-y-4">
+                    <h2 class="text-xl font-semibold text-white border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-user text-sky-400 mr-2"></i> Kontaktdaten
+                    </h2>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-1">Vor- und Nachname *</label>
+                        <input type="text" name="Name" required class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-colors">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-1">E-Mail Adresse *</label>
+                        <input type="email" name="Email" required class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-colors">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-1">Telefonnummer *</label>
+                        <input type="tel" name="Telefon" required class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-colors">
+                    </div>
+                </div>
+
+                <!-- Druck-Details -->
+                <div class="space-y-4">
+                    <h2 class="text-xl font-semibold text-white border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-print text-sky-400 mr-2"></i> Druck-Details
+                    </h2>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-1">3MF Datei hochladen *</label>
+                        <input type="file" name="3MF_Datei" accept=".3mf" required class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sky-500 file:text-white hover:file:bg-sky-600 cursor-pointer transition-colors">
+                        <p class="text-xs text-slate-400 mt-1">Nur .3mf Dateien sind erlaubt.</p>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <div class="w-1/2">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Gewicht *</label>
+                            <div class="relative">
+                                <input type="number" id="weight" name="Gewicht_in_Gramm" min="1" step="1" placeholder="z.B. 50" required class="w-full bg-slate-800 border border-slate-600 rounded-lg pl-4 pr-10 py-2.5 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-colors">
+                                <span class="absolute right-3 top-3 text-slate-400 text-sm">g</span>
+                            </div>
+                        </div>
+                        <div class="w-1/2">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">Druckzeit *</label>
+                            <div class="relative">
+                                <input type="number" id="time" name="Druckzeit_in_Minuten" min="1" step="1" placeholder="z.B. 120" required class="w-full bg-slate-800 border border-slate-600 rounded-lg pl-4 pr-12 py-2.5 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-colors">
+                                <span class="absolute right-3 top-3 text-slate-400 text-sm">min</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-sky-400 mt-1"><i class="fa-solid fa-circle-info"></i> Lese die Zeit und das Gewicht aus deinem Slicer (z.B. Bambu Studio) ab.</p>
+                </div>
+            </div>
+
+            <!-- Preis-Rechner -->
+            <div class="mt-8 bg-slate-800/50 border border-sky-500/30 rounded-xl p-6 text-center">
+                <p class="text-slate-300 text-sm uppercase tracking-widest mb-2">Geschätzter Gesamtpreis</p>
+                <div class="text-5xl font-bold text-white mb-2" id="price_display">0,00 €</div>
+                <p class="text-xs text-slate-400">1,00 € pro 10g  +  0,20 € pro Minute</p>
+            </div>
+
+            <button type="submit" class="w-full bg-accent text-white font-bold text-lg py-4 rounded-xl shadow-lg hover:shadow-sky-500/25 transform transition hover:-translate-y-1 mt-6">
+                <i class="fa-solid fa-paper-plane mr-2"></i> Druckauftrag senden
+            </button>
+        </form>
+    </div>
+
+    <!-- JavaScript für die Live-Berechnung -->
+    <script>
+        const weightInput = document.getElementById('weight');
+        const timeInput = document.getElementById('time');
+        const priceDisplay = document.getElementById('price_display');
+        const hiddenPrice = document.getElementById('hidden_price');
+
+        function calculatePrice() {
+            const weight = parseFloat(weightInput.value) || 0;
+            const time = parseFloat(timeInput.value) || 0;
+
+            // Formel: (Gewicht / 10 * 1,00€) + (Zeit * 0,20€)
+            const price = (weight / 10) + (time * 0.20);
+            
+            // Formatieren in deutsches Euro-Format (z.B. 12,50 €)
+            const formattedPrice = price.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+            
+            priceDisplay.textContent = formattedPrice;
+            
+            // Speichert den Preis in einem unsichtbaren Feld, damit es in der E-Mail steht
+            hiddenPrice.value = formattedPrice;
+        }
+
+        // Live-Update sobald getippt wird
+        weightInput.addEventListener('input', calculatePrice);
+        timeInput.addEventListener('input', calculatePrice);
+    </script>
+</body>
+</html>
